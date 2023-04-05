@@ -10,17 +10,17 @@ function main()
 	m_max = max(X);
 	m_min = min(X);
 
-    fprintf("(a) Максимальное значение выборки (M_max) = %f\n", m_max)
-    fprintf("    Минимальное значение выборки  (M_min) = %f\n", m_min)
+    fprintf("(a) (M_max) = %f\n", m_max)
+    fprintf("    (M_min) = %f\n", m_min)
     fprintf("-------------------------------------------------\n")
 
 	% (б) размах выборки
     r = m_max - m_min;
-    fprintf("(б) Размах выборки (R) = %f\n", r)
+    fprintf("(б) R = %f\n", r)
     fprintf("------------------------------\n")
 
     % (в) вычисление оценок MX DX
-    n = length(X);
+    n = length(X)
     mu = sum(X) / n;
     s_2 = sum((X - mu).^2) / (n - 1);
     sigma = sqrt(s_2);
@@ -133,38 +133,37 @@ function main()
     hold on;
     grid on;
 	n = length(X);
-	xx = zeros(1, m + 3);
+	xx = zeros(1, length(X));
+	curss = 1;
 
-	bins = [(min(bins) - 0.5) bins (max(bins) + 1)];
-	counts = [0 counts 0];
-
-	m = m + 2;
-
-	acc = 0;
-
-	for i = 2:m
-		acc = acc + counts(i);
-		xx(i) = acc / n;
+	bins = zeros(1, length(X));
+	bins(1) = X(1);
+	for i = 2:length(X)
+		%fprintf("i = %d; curss = %d, X(I) = %d, xx = %d\n", i, curss, X(i), xx(curss))
+		if (bins(curss) != X(i))
+			curss+= 1;
+			bins(curss) = X(i);
+			xx(curss) = xx(curss-1);
+		endif
+		if (bins(curss) == X(i))
+			xx(curss) += 1;
+		endif
 	end
 
-	xx(m + 1) = 1;
+	xx = xx ./ length(X);
+
+	for i = curss:length(X)
+		xx(i) = 1;
+	end
+
 
 	X_n = (min(X) - 0.5):(sigma / 100):(max(X) + 1.5);
 	X_cdf = normcdf(X_n, mu, s_2);
 	plot(X_n, X_cdf, "r");
 
-
-	for i = 2:m
-		fprintf("x = %f : F(x) = %f\n", bins(i), xx(i));
-	end
-
-
-	set(gca, "xtick", bins);
-	set(gca, "ylim", [0, 1.1]);
-	set(gca, "ytick", xx);
 	stairs(bins, xx);
-    xlabel('X')
-    ylabel('F')
-    print -djpg cdf.jpg
+    xlabel('X');
+    ylabel('F');
+    print -djpg cdf.jpg;
     hold off;
 end
