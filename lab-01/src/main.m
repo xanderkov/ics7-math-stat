@@ -109,9 +109,9 @@ function main()
 
 	fprintf("[проверка] площадь гистограммы s = %f\n", sum(xx) * delta);
 
-	set(gca, "xtick", bins);
-	set(gca, "ytick", xx);
-	set(gca, "xlim", [min(bins) - 1, max(bins) + 1]);
+	% set(gca, "xtick", bins);
+	% set(gca, "ytick", xx);
+	% set(gca, "xlim", [min(bins) - 1, max(bins) + 1]);
 	bar(middles, xx, 1, "facecolor", "g", "edgecolor", "w");
 
 	X_n = m_min:(sigma / 100):m_max;
