@@ -28,17 +28,20 @@ function main()
     fprintf('   Верхняя граница доверительного интервала для дисперсии = %.3f\n', s2_high);
 
     % Создание массивов точечных оценок
-    mus = zeros(1, n);
-    s2s = zeros(1, n);
-    % Создание массивов границ доверительных интервалов
-    mus_low = zeros(1, n);
-    mus_high = zeros(1, n);
-    s2s_low = zeros(1, n);
-    s2s_high = zeros(1, n);
 
-    for i = 1:n
-        mu = mean(X(1:i));
-        s2 = var(X(1:i));
+    n_start = 1;
+
+    mus = zeros(n_start, n);
+    s2s = zeros(n_start, n);
+    % Создание массивов границ доверительных интервалов
+    mus_low = zeros(n_start, n);
+    mus_high = zeros(n_start, n);
+    s2s_low = zeros(n_start, n);
+    s2s_high = zeros(n_start, n);
+
+    for i = n_start:n
+        mu = mean(X(n_start:i));
+        s2 = var(X(n_start:i));
         % Точечная оценка матожидания
         mus(i) = mu;
         % Точечная оценка дисперсии
@@ -54,26 +57,27 @@ function main()
     end
 
     % Построение графиков
-    plot(1:n, [(zeros(1, n) + mu)', mus', mus_low', mus_high']);
+    plot(n_start:n, [(zeros(n_start, n) + mu)', mus', mus_low', mus_high']);
     grid on;
     xlabel('n');
     ylabel('y');
 
     legend('точечная оценка \mu(x_N)', 'точечная оценка \mu(x_n)', 'верхняя граница ДО \mu', ...
         'нижняя граница ДО \mu', 'Interpreter', 'tex');
-    set(gca, "ylim", [-5, 6]);
+    set(gca, "ylim", [-5, -4]);
+    set(gca, "xlim", [10, 150]);
     print -djpg g-1.jpg
 
     figure;
-    plot(1:n, [(zeros(1, n) + s2)', s2s', s2s_low', s2s_high']);
+    plot(n_start:n, [(zeros(1, n) + s2)', s2s', s2s_low', s2s_high']);
     grid on;
     xlabel('n');
     ylabel('z');
     legend('точечная оценка S^2(x_N)', 'точечная оценка S^2(x_n)', 'верхняя граница ДО \sigma', ...
             'нижняя граница ДО \sigma', 'Interpreter', 'tex');
-    % set(gca, "ylim",[0, 15]);
-    set(gca, "xlim", [15, 150]);
-    print -djpg g2-2.jpg
+    set(gca, "ylim",[0, 2]);
+    set(gca, "xlim", [10, 150]);
+    print -djpg g-2.jpg
 end
 
 function mu_low = get_mu_low(n, mu, s2, gamma)
