@@ -1,7 +1,7 @@
 function main()
 	pkg load statistics
 
-	X = dlmread("input.txt", ",");
+	X = dlmread("def.txt", ",");
 
 	X = sort(X);
 

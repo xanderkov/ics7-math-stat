@@ -3,7 +3,7 @@ function main()
 
 	X = dlmread("input.txt", ",");
 
-    gamma = 0.9;
+    gamma = 0.8;
     n = length(X);
     % Точечная оценка мат. ожидания
     mu = mean(X);
